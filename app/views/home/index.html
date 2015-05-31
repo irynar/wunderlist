@@ -1,0 +1,74 @@
+<div ng-controller="TodoController as todos"
+     class="container">
+    <!--Add/edit todo form-->
+    <form ng-submit="todos.add(todos.activeTodo)">
+        <div class="panel panel-default" style="margin-top: 15px;">
+            <div class="panel-body">
+                <input type="text"
+                       class="form-control"
+                       placeholder="Add something..."
+                       ng-model="todos.activeTodo.title"/>
+                <button class="hidden">
+                    Add task
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!--Active todos table-->
+    <div ng-if="todos.getUnfinishedCount() > 0"
+         class="panel panel-default">
+        <div class="panel-heading">
+            Active: {{todos.getUnfinishedCount()}}
+            <button ng-click="todos.markAllAsFinished()"
+                    class="btn btn-warning btn-xs pull-right">
+                Mark All As Finished
+            </button>
+        </div>
+        <table class="table table-hover">
+            <tr ng-repeat="todo in todos.list | filter:{ done: false }">
+                <td width="25">
+                    <input type="checkbox"
+                           ng-model="todo.done">
+                </td>
+                <td width="900">
+                    {{todo.title}}
+                </td>
+                <td width="50">
+                    <button ng-click="todos.edit(todo.id)"
+                            class="btn btn-link">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!--Complete todos table-->
+    <div ng-if="todos.getFinishedCount() > 0"
+         class="panel panel-default">
+        <div class="panel-heading">
+            Complete: {{todos.getFinishedCount()}}
+            <button ng-click="todos.destroyAllFinished()"
+                    class="btn btn-danger btn-xs pull-right">
+                Destroy Finished
+            </button>
+        </div>
+        <table class="table table-hover">
+            <tr ng-repeat="todo in todos.list | filter:{ done: true }"
+                class="active">
+                <td width="25">
+                    <input type="checkbox"
+                           ng-model="todo.done">
+                </td>
+                <td width="900">{{todo.title}}</td>
+                <td width="50">
+                    <button ng-click="todos.destroy(todo.id)"
+                            class="btn btn-link">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
